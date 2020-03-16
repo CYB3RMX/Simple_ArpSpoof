@@ -11,7 +11,7 @@ def SendSpoof():
     router = str(input("[+] Enter router ip: "))
     target = str(input("[+] Enter target ip: "))
 
-    # [EN] Enabling ip forwarding so our victim's connection is continue
+    # [EN] Enabling ip forwarding so our victim's connection will continue
     # [TR] IP forward ı etkinlestirip kurbanın baglantısının kesilmemesini sağlıyoruz
     print("[*] Enabling IP forward...")
     os.system("sudo echo 1 > /proc/sys/net/ipv4/ip_forward")
