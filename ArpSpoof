@@ -7,7 +7,7 @@ from scapy.all import *
 
 def SendSpoof():
     # [EN] Getting interface, targets and routers ip.
-    # [TR] Network arayuzunu, hedefin ve yönlendiricinin ip adresii aliyoruz.
+    # [TR] Network arayuzunu, hedefin ve yönlendiricinin ip adresini aliyoruz.
     router = str(input("[+] Enter router ip: "))
     target = str(input("[+] Enter target ip: "))
     ifacer = str(input("[+] Enter interface: "))
